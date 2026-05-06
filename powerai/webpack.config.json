@@ -1,14 +1,29 @@
-{
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "jsx": "react",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "sourceMap": true
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  mode: 'development',
+  entry: './src/taskpane/index.tsx',
+  module: {
+    rules: [
+      { test: /\.tsx?$/, use: 'ts-loader', exclude: /node_modules/ },
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] }
+    ]
   },
-  "include": ["src/**/*"]
-}
+  resolve: { extensions: ['.tsx', '.ts', '.js'] },
+  output: { filename: 'taskpane.js', path: path.resolve(__dirname, 'dist') },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './src/taskpane/taskpane.html',
+      filename: 'taskpane.html'
+    })
+  ],
+  devServer: {
+    static: './dist',
+    https: true,
+    port: 3000,
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    }
+  }
+};
